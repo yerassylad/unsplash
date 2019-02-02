@@ -1,24 +1,50 @@
-import React, { Fragment, Component } from 'react';
+import React, { Component } from 'react';
 import sizeMe from 'react-sizeme';
 
 const Col = props => {
-  return <div style={{display: 'inline-block', height: '100vh', backgroundColor: 'green', border: "10px solid black", width: "100px"}}>{JSON.stringify(props.images)}</div>
+  return (
+    <div className="column">
+      <div style={{backgroundColor: 'lightgrey', paddingBottom: '1rem'}}>
+        {JSON.stringify(props.images)}
+      </div>
+    </div>
+  )
 }
 
 class Size extends Component {
-  _renderColumns = () => {
-    const {size} = this.props;
-    const count = Math.floor(size.width / 330);
-    const images = [1,2,3,4,5,6,7,8,9,10];
-    let chunkedArray = Array.apply(null, new Array(count)).map(() => []);
-    for(let i = 0; i < images.length; i++) {
-      chunkedArray[i % chunkedArray.length].push(images[i]);
-    }
-    return chunkedArray.map((arr, index) => <Col key={index} images={arr} />) 
+  _getColumns = () => {
+    const width = this.props.size.width;
+    if (width < 768) return 1;
+    if (width < 992 && width >= 768) return 2;
+    return 3;
   }
 
-  render() { 
-    return ( <div>{this._renderColumns()}</div> );
+  _spreadImages = () => {
+    const images = this.props.images;
+    const amount = this._getColumns();
+    if (images.length) {
+      let spreaderArray = Array.apply(null, new Array(amount)).map(() => []);
+      for(let i = 0; i < images.length; i++) {
+        spreaderArray[i % spreaderArray.length].push(images[i]);
+      }
+      return spreaderArray
+    }
+  }
+
+  _renderColumns = () => {
+    return this._spreadImages().map((arr, index) => <Col key={index} images={arr} />)
+  }
+
+  render() {
+    const columns = this._getColumns();
+    const columnsClassName = columns === 3 ? "three column" : columns === 2 ? "two column" : ""
+    return (
+    <div className="ui grid">
+      <div className={`${columnsClassName} row`}>
+        {this._renderColumns()}
+      </div>
+    </div>
+  );
   }
 }
 
