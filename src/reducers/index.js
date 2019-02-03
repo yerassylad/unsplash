@@ -1,6 +1,8 @@
 import { combineReducers } from 'redux';
 import searchBarReducer from './searchBarReducer';
+import imagesReducer from './imagesReducer';
 
 export default combineReducers({
-  searchBar: searchBarReducer
+  searchBar: searchBarReducer,
+  images: imagesReducer
 });

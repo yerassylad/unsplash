@@ -4,7 +4,7 @@ import Size from '../containers/Size';
 
 const App = props => {
   return (
-    <div>App
+    <div>
       <SearchBar />
       <Size images={[1,2,3,4,5,6,7,8,9,10]} />
     </div>

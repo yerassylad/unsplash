@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import sizeMe from 'react-sizeme';
 
 const Col = props => {
+  const {images} = props;
   return (
     <div className="column">
-      <div style={{backgroundColor: 'lightgrey', paddingBottom: '1rem'}}>
-        {JSON.stringify(props.images)}
+      <div>
+        {images.map( image => <div style={{backgroundColor: 'white', paddingBottom: '2rem'}}>{image}</div>)}
       </div>
     </div>
   )
@@ -39,9 +40,11 @@ class Size extends Component {
     const columns = this._getColumns();
     const columnsClassName = columns === 3 ? "three column" : columns === 2 ? "two column" : ""
     return (
-    <div className="ui grid">
-      <div className={`${columnsClassName} row`}>
-        {this._renderColumns()}
+    <div className="ui fluid container">
+      <div className="ui padded grid">
+        <div className={`${columnsClassName} row`} style={{backgroundColor: 'lightgrey'}}>
+          {this._renderColumns()}
+        </div>
       </div>
     </div>
   );
