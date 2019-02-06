@@ -1,41 +1,32 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { compose } from 'redux';
-import sizeMe from 'react-sizeme';
 import getImages from '../actions/getImages';
 import './style.css'
 
 class ImageListContainer extends Component {
-  state = {columnAmount: null, width: 0}
+  state = { columnAmount: null }
 
   componentDidMount = () => {
-    this._updateWindowDimensions();
-    window.addEventListener('resize', this._updateWindowDimensions);
+    this.props.getImages();
   }
 
-  componentDidUpdate = (prevProps, prevState) => {
-    if (this.state.width !== prevState.width) {
+  componentDidUpdate = (prevProps) => {
+    if (this.props.screenWidth !== prevProps.screenWidth) {
       this.setState({columnAmount: this._getColumns()});
     }
-  }
-
-  componentWillUnmount = () => {
-    window.removeEventListener('resize', this._updateWindowDimensions);
-  }
-
-  _updateWindowDimensions = () => {
-    this.setState({width: window.innerWidth});
+    console.log(this.state.columnAmount);
+    
   }
 
   _getColumns = () => {
-    const width = this.state.width;
+    const width = this.props.screenWidth;
     if (width < 768) return 1;
     if (width < 992 && width >= 768) return 2;
     return 3;
   }
 
   _spreadImages = () => {
-    const images = this.props.i;
+    const images = this.props.images;
     if (!images.length) return null;
     let spreaderArray = Array.apply(null, new Array(this.state.columnAmount)).map(() => []);
     for(let i = 0; i < images.length; i++) {
@@ -47,18 +38,18 @@ class ImageListContainer extends Component {
   render() {
     const columnAmount = this.state.columnAmount;
     const spreadedImages = this._spreadImages();
+    if (!spreadedImages) return <div />;
     const columnClassName = columnAmount === 3 ? "three" : columnAmount === 2 ? "two" : '';
     return (<div className={`wrapper ${columnClassName}`}>{spreadedImages.map(column => {
       return (<div className="column">
         {column.map(image => {
           return (<div className="item">
-            <img src='https://pp.userapi.com/c824700/v824700021/ab807/_dxdmpuBkDQ.jpg' />
+            <img src={image.urls.regular} alt="" />
           </div>);
         })}
       </div>);
     })}</div>);
   };
 }
-// sizeMe({refreshRate: 400})
 
-export default connect(state => ({images: state.images}), { getImages })(ImageListContainer);
+export default connect(state => ({images: state.images, screenWidth: state.screenWidth}), { getImages })(ImageListContainer);
