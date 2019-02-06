@@ -1,6 +1,4 @@
-const defaultState = [];
-
-export default (state = defaultState, action) => {
+export default (state = [], action) => {
   if (action.type === "GET_IMAGES_SUCCESS") {
     return action.payload;
   }
