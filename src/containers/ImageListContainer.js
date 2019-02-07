@@ -1,18 +1,29 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import getImages from '../actions/getImages';
+import addImages from '../actions/addImages';
+import getPercentageScrolled from '../utils/scrolledPercantage';
 import './style.css'
 
 class ImageListContainer extends Component {
   state = { columnAmount: null }
 
   componentDidMount = () => {
+    this.props.getImages();
     this.setState({columnAmount: this._getColumns()})
+    window.addEventListener('scroll', this._getSecondPage);
   }
 
   componentDidUpdate = (prevProps) => {
     if (this.props.screenWidth !== prevProps.screenWidth) {
       this.setState({columnAmount: this._getColumns()});
+    }
+  }
+
+  _getSecondPage = () => {
+    const pctScrolled = getPercentageScrolled();
+    if (pctScrolled === 70) {
+      this.props.addImages();
     }
   }
 
@@ -46,8 +57,9 @@ class ImageListContainer extends Component {
           </div>);
         })}
       </div>);
-    })}</div>);
+    })}
+    </div>);
   };
 }
 
-export default connect(state => ({images: state.images, screenWidth: state.screenWidth}), { getImages })(ImageListContainer);
+export default connect(state => ({images: state.images, screenWidth: state.screenWidth}), { getImages, addImages })(ImageListContainer);

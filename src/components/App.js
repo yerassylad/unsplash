@@ -6,13 +6,13 @@ import ImagesListContainer from '../containers/ImageListContainer';
 class App extends Component {
   componentDidMount = () => {
     this.props.resizeScreen();
-    window.addEventListener('resize', this.props.resizeScreen)
+    window.addEventListener('resize', this.props.resizeScreen);
   }
 
   componentWillUnmount = () => {
-    window.removeEventListener('resize', this.props.resizeScreen)
+    window.removeEventListener('resize', this.props.resizeScreen);
   }
-
+  
   render() { 
     return (
       <div style={{margin: "0 10px"}}>
@@ -27,4 +27,4 @@ export default connect(
       width: state.width
     }),
     { resizeScreen }
-  )(App);
+)(App);
