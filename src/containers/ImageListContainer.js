@@ -7,15 +7,13 @@ class ImageListContainer extends Component {
   state = { columnAmount: null }
 
   componentDidMount = () => {
-    this.props.getImages();
+    this.setState({columnAmount: this._getColumns()})
   }
 
   componentDidUpdate = (prevProps) => {
     if (this.props.screenWidth !== prevProps.screenWidth) {
       this.setState({columnAmount: this._getColumns()});
     }
-    console.log(this.state.columnAmount);
-    
   }
 
   _getColumns = () => {
